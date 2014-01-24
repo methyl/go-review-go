@@ -1,0 +1,36 @@
+.code-review {
+  padding: 10px;
+  margin: 10px 0;
+  color: #777;
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.code-review-accepted {
+  color: #5d8a4a;
+  background-color: #d8f5cd;
+  border-color: #a5d792;
+}
+
+.code-review-passed {
+  color: #a1882b;
+  background-color: #f8eec7;
+  border-color: #e2cc7a;
+}
+
+.code-review-rejected {
+  background-color: #e9aeae;
+  border-color: #b33630;
+  color: #cd504a;
+}
+
+.code-review .buttons {
+  float: right;
+}
+
+.code-review h2 {
+  margin: 0;
+  line-height: 34px;
+}
