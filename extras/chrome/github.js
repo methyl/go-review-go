@@ -43,9 +43,23 @@ var Commit = Backbone.Model.extend({
   }
 });
 
+var GithubUrl = function (url) {
+  this.url = url;
+};
+
+_.extend(GithubUrl.prototype, {
+  isCommit: function () {
+    return !! this.url.match(/^\/([^\/]+)\/([^\/]+)\/commit\//);
+  }
+});
+
 $(function () {
-  var commit = new Commit({}, { url: location.pathname });
-  var view = new View({ model: commit });
-  view.render().$el.insertAfter($('.commit'));
-  commit.fetch();
+  var url = new GithubUrl(window.location.pathname.toString());
+
+  if (url.isCommit()) {
+    var commit = new Commit({}, { url: location.pathname });
+    var view = new View({ model: commit });
+    view.render().$el.insertAfter($('.commit'));
+    commit.fetch();
+  }
 });
