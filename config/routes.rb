@@ -1,4 +1,7 @@
 GoReviewGo::Application.routes.draw do
+  get ':user/:repo/commit/:sha' => 'commits#show'
+  put ':user/:repo/commit/:sha' => 'commits#update'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
