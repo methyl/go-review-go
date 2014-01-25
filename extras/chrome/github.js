@@ -1,6 +1,6 @@
-const API_HOST = 'http://localhost:3001';
+const API_HOST = 'http://localhost:3001/';
 
-var View = Backbone.View.extend({
+var CommitView = Backbone.View.extend({
   initialize: function () {
     this.listenTo(this.model, "change", this.render);
   },
@@ -29,8 +29,8 @@ var View = Backbone.View.extend({
 });
 
 var Commit = Backbone.Model.extend({
-  initialize: function (attributes, options) {
-    this.url = options.url;
+  url: function () {
+    return '/commits/' + this.get('sha');
   },
 
   sync: function (method, model, options) {
@@ -45,11 +45,29 @@ var Commit = Backbone.Model.extend({
 
 var GithubUrl = function (url) {
   this.url = url;
+  this.parts = url.slice(1).split('/');
 };
 
 _.extend(GithubUrl.prototype, {
   isCommit: function () {
-    return !! this.url.match(/^\/([^\/]+)\/([^\/]+)\/commit\//);
+    return this.parts[2] === 'commit';
+  },
+
+  isCommitsList: function () {
+    return this.parts[2] === 'commits';
+  },
+
+  getUser: function () {
+    return this.parts[0];
+  },
+
+  getRepo: function () {
+    return this.parts[1];
+  },
+
+  getCommitSha: function () {
+    if (this.parts[2] !== 'commit') throw new Error("Cannot get commit SHA");
+    return this.parts[3];
   }
 });
 
@@ -57,8 +75,8 @@ $(function () {
   var url = new GithubUrl(window.location.pathname.toString());
 
   if (url.isCommit()) {
-    var commit = new Commit({}, { url: location.pathname });
-    var view = new View({ model: commit });
+    var commit = new Commit({ sha: url.getCommitSha() });
+    var view = new CommitView({ model: commit });
     view.render().$el.insertAfter($('.commit'));
     commit.fetch();
   }
