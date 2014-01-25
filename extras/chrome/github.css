@@ -1,11 +1,8 @@
 .code-review {
-  padding: 10px;
-  margin: 10px 0;
   color: #777;
   background-color: #fff;
   border: 1px solid #eee;
   border-radius: 4px;
-  overflow: hidden;
 }
 
 .code-review-accepted {
@@ -26,11 +23,26 @@
   color: #cd504a;
 }
 
-.code-review .buttons {
+.code-review-form {
+  padding: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.code-review-form .buttons {
   float: right;
 }
 
-.code-review h2 {
+.code-review-form h2 {
   margin: 0;
   line-height: 34px;
+}
+
+.code-review-status {
+  position: absolute;
+  top: 0px;
+  right: 160px;
+  width: 80px;
+  padding: 4px 8px;
+  text-align: center;
 }

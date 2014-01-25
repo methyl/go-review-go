@@ -1,6 +1,6 @@
 const API_HOST = 'http://localhost:3001/';
 
-var CommitView = Backbone.View.extend({
+var FormView = Backbone.View.extend({
   initialize: function () {
     this.listenTo(this.model, "change", this.render);
   },
@@ -11,7 +11,7 @@ var CommitView = Backbone.View.extend({
   },
 
   template: _.template(
-    '<div class="code-review code-review-<%= status %>">' +
+    '<div class="code-review-form code-review code-review-<%= status %>">' +
     '  <div class="buttons">' +
     '    <button class="button primary" data-status="accepted">Accept</button>' +
     '    <button class="button" data-status="passed">Pass</button>' +
@@ -28,9 +28,30 @@ var CommitView = Backbone.View.extend({
   }
 });
 
+var StatusView = Backbone.View.extend({
+  initialize: function () {
+    this.listenTo(this.model, "change", this.render);
+  },
+
+  render: function () {
+    this.$el.html(this.template(this.model.toJSON()));
+    return this;
+  },
+
+  template: _.template(
+    '<div class="code-review-status code-review code-review-<%= status %>">' +
+    '  <%= humanStatus %></h2>' +
+    '</div>'
+  )
+});
+
 var Commit = Backbone.Model.extend({
+  defaults: {
+    status: 'pending'
+  },
+
   url: function () {
-    return '/commits/' + this.get('sha');
+    return 'commits/' + this.get('sha');
   },
 
   sync: function (method, model, options) {
@@ -40,6 +61,12 @@ var Commit = Backbone.Model.extend({
 
   isNew: function () {
     return false;
+  },
+
+  toJSON: function () {
+    var json = Backbone.Model.prototype.toJSON.call(this);
+    json.humanStatus = this.get('status').charAt(0).toUpperCase() + this.get('status').slice(1);
+    return json;
   }
 });
 
@@ -66,7 +93,7 @@ _.extend(GithubUrl.prototype, {
   },
 
   getCommitSha: function () {
-    if (this.parts[2] !== 'commit') throw new Error("Cannot get commit SHA");
+    if (this.parts[2] !== 'commit' && this.parts[2] !== 'tree') throw new Error("Cannot get commit SHA");
     return this.parts[3];
   }
 });
@@ -76,8 +103,17 @@ $(function () {
 
   if (url.isCommit()) {
     var commit = new Commit({ sha: url.getCommitSha() });
-    var view = new CommitView({ model: commit });
+    var view = new FormView({ model: commit });
     view.render().$el.insertAfter($('.commit'));
     commit.fetch();
+  } else if (url.isCommitsList()) {
+    $('.commit').each(function () {
+      var el = $(this);
+      var url = new GithubUrl(el.find('.browse-button').attr('href'));
+      var commit = new Commit({ sha: url.getCommitSha() });
+      var view = new StatusView({ model: commit });
+      view.render().$el.appendTo(el.find('.commit-links'));
+      commit.fetch();
+    });
   }
 });
