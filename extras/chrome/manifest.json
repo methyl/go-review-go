@@ -6,8 +6,13 @@
   "version": "1.0",
 
   "permissions": [
-    "http://localhost:3001/"
+    "http://localhost:3001/", "webNavigation"
   ],
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
 
   "content_scripts": [
     {

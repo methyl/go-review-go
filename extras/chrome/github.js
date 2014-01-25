@@ -98,22 +98,64 @@ _.extend(GithubUrl.prototype, {
   }
 });
 
-$(function () {
-  var url = new GithubUrl(window.location.pathname.toString());
+var App = function () {
+  this.views = [];
+};
 
-  if (url.isCommit()) {
-    var commit = new Commit({ sha: url.getCommitSha() });
-    var view = new FormView({ model: commit });
-    view.render().$el.insertAfter($('.commit'));
-    commit.fetch();
-  } else if (url.isCommitsList()) {
-    $('.commit').each(function () {
-      var el = $(this);
-      var url = new GithubUrl(el.find('.browse-button').attr('href'));
+_.extend(App.prototype, {
+  run: function () {
+    this.refresh();
+  },
+
+  refresh: function () {
+    var url = window.location.pathname.toString();
+    if (url != this.lastUrl) {
+      this.lastUrl = url;
+      this.remove();
+      this.display();
+    }
+  },
+
+  display: function () {
+    var url = new GithubUrl(window.location.pathname.toString());
+
+    if (url.isCommit()) {
       var commit = new Commit({ sha: url.getCommitSha() });
-      var view = new StatusView({ model: commit });
-      view.render().$el.appendTo(el.find('.commit-links'));
+      var view = new FormView({ model: commit });
+      view.render().$el.insertAfter($('.full-commit'));
       commit.fetch();
+      this.views.push(view);
+    } else if (url.isCommitsList()) {
+      $('.commit-group .commit').each(function (i, el) {
+        var el = $(el);
+        var url = new GithubUrl(el.find('.browse-button').attr('href'));
+        var commit = new Commit({ sha: url.getCommitSha() });
+        var view = new StatusView({ model: commit });
+        view.render().$el.appendTo(el.find('.commit-links'));
+        commit.fetch();
+        this.views.push(view);
+      }.bind(this));
+    }
+  },
+
+  remove: function () {
+    this.views.forEach(function (view) {
+      view.remove();
     });
+    this.views = [];
+    $('.code-review').remove();
   }
+});
+
+$(function () {
+  var app = new App();
+  app.run();
+
+  chrome.runtime.onMessage.addListener(function (request) {
+    if (request.message == 'history-updated') {
+      window.setTimeout(function () {
+        app.refresh();
+      }, 500)
+    }
+  });
 });
