@@ -10,8 +10,6 @@ class Push
   end
 
   def create_commit(payload)
-    Commit.create!(
-      sha: payload["id"]
-    )
+    Commit.find_or_create_by(sha: payload["id"])
   end
 end
