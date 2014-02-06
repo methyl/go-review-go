@@ -1,5 +1,6 @@
 GoReviewGo::Application.routes.draw do
   resources :commits
+  resources :pushes
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
