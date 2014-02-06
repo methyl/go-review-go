@@ -1,5 +1,9 @@
 GoReviewGo::Application.routes.draw do
-  resources :commits
+  resources :commits do
+    collection do
+      get :pending
+    end
+  end
   resources :pushes
 
   # The priority is based upon order of creation: first created -> highest priority.

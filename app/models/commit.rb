@@ -5,4 +5,8 @@ class Commit < ActiveRecord::Base
   def to_param
     sha
   end
+
+  def self.pending
+    where(status: nil)
+  end
 end

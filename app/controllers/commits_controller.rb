@@ -12,4 +12,9 @@ class CommitsController < ApplicationController
     render :json => commit
     Notification.new(commit).deliver
   end
+
+  def pending
+    @commits = Commit.pending
+    render json: @commits
+  end
 end
