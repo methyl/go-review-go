@@ -10,5 +10,6 @@ class CommitsController < ApplicationController
     commit = Commit.find_or_create_by(sha: params[:id])
     commit.update_attributes!(status: params[:status])
     render :json => commit
+    Notification.new(commit).deliver
   end
 end
