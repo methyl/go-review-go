@@ -3,6 +3,10 @@ class Push
     @payload = payload
   end
 
+  def master?
+    @payload["ref"] == "refs/heads/master"
+  end
+
   def create_commits
     @payload["commits"].each do |commit_payload|
       create_commit(commit_payload)
@@ -10,17 +14,19 @@ class Push
   end
 
   def create_commit(payload)
-    Commit.find_or_create_by(sha: payload["id"]) do |c|
+    Commit.find_or_create_by!(sha: payload["id"]).tap do |c|
       c.repo      = repo
       c.author    = find_or_create_person(payload["author"])
       c.committer = find_or_create_person(payload["committer"])
       c.message   = payload["message"]
       c.timestamp = Time.parse(payload["timestamp"])
+      c.master    = master?
+      c.save!
     end
   end
 
   def find_or_create_person(payload)
-    Person.find_or_create_by(email: payload["email"]) do |p|
+    Person.find_or_create_by!(email: payload["email"]) do |p|
       p.name = payload["name"]
       p.username = payload["username"]
     end

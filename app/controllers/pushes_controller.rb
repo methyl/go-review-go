@@ -3,7 +3,8 @@ class PushesController < ApplicationController
   before_action :authenticate_push
 
   def create
-    push = Push.new(JSON.parse(params[:payload])).create_commits
+    push = Push.new(JSON.parse(params[:payload]))
+    push.create_commits
     head :ok
   end
 

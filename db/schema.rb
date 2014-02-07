@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140207083405) do
+ActiveRecord::Schema.define(version: 20140207084443) do
 
   create_table "commits", force: true do |t|
     t.string   "sha"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20140207083405) do
     t.datetime "timestamp"
     t.text     "message"
     t.integer  "repo_id"
+    t.boolean  "master",       default: false
   end
 
   add_index "commits", ["author_id"], name: "index_commits_on_author_id", using: :btree
