@@ -14,6 +14,10 @@ class Commit < ActiveRecord::Base
     sha
   end
 
+  def github_url
+    "https://github.com/#{repo.full_name}/commit/#{sha}"
+  end
+
   def as_json(options = nil)
     options[:include] ||= [:author, :committer]
     super(options)

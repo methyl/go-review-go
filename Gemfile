@@ -11,3 +11,4 @@ gem 'jbuilder', '~> 1.2'
 # gem 'debugger', group: [:development, :test]
 gem 'hipchat', github: 'hipchat/hipchat-rb'
 gem 'dotenv-rails', group: :development
+gem 'haml-rails'

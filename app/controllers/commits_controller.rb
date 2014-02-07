@@ -3,7 +3,9 @@ class CommitsController < ApplicationController
 
   def show
     commit = Commit.find_by_sha(params[:id])
-    render :json => commit
+    respond_to do |format|
+      format.json { render :json => commit }
+    end
   end
 
   def update
@@ -15,11 +17,17 @@ class CommitsController < ApplicationController
 
   def pending
     @commits = Commit.master.pending
-    render json: @commits
+    respond_to do |format|
+      format.html
+      format.json { render :json => @commits }
+    end
   end
 
   def rejected
     @commits = Commit.master.rejected
-    render json: @commits
+    respond_to do |format|
+      format.html
+      format.json { render :json => @commits }
+    end
   end
 end

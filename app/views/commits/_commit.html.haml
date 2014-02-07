@@ -1,0 +1,7 @@
+%div.commit
+  = link_to commit.sha, commit.github_url
+  &nbsp;
+  = commit.timestamp
+  &nbsp;
+  = commit.message
+  [#{link_to commit.author.name, commit.author.github_url}]
