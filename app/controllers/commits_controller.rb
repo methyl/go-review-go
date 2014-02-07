@@ -14,7 +14,7 @@ class CommitsController < ApplicationController
   end
 
   def pending
-    @commits = Commit.pending
+    @commits = Commit.master.pending
     render json: @commits
   end
 end

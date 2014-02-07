@@ -6,6 +6,9 @@ class Commit < ActiveRecord::Base
   validates :sha, format: /[0-9a-f]{40}/, uniqueness: true
   validates :status, inclusion: %w(accepted passed rejected), allow_nil: true
 
+  scope :master,   -> { where(master: true) }
+  scope :pending,  -> { where(status: nil) }
+
   def to_param
     sha
   end
@@ -13,9 +16,5 @@ class Commit < ActiveRecord::Base
   def as_json(options = nil)
     options[:include] ||= [:author, :committer]
     super(options)
-  end
-
-  def self.pending
-    where(status: nil)
   end
 end
