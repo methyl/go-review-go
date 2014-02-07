@@ -48,9 +48,6 @@ class CommitsController < ApplicationController
     commit = Commit.find_or_create_by(sha: params[:id])
     commit.update_attributes!(status: params[:status])
     Notification.new(commit).deliver
-    respond_to do |format|
-      format.html { redirect_to pending_commits_path }
-      format.json { render :json => commit }
-    end
+    render :json => commit
   end
 end
