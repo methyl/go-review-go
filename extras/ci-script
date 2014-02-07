@@ -1,0 +1,9 @@
+#!/bin/bash
+
+COMMITS=`curl -s http://localhost:3001/commits/rejected.text`
+if [[ -z $COMMITS ]]
+then
+  exit 0
+else
+  exit 1
+fi
