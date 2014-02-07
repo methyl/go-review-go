@@ -8,6 +8,7 @@ class Commit < ActiveRecord::Base
 
   scope :master,   -> { where(master: true) }
   scope :pending,  -> { where(status: nil) }
+  scope :rejected, -> { where(status: "rejected") }
 
   def to_param
     sha

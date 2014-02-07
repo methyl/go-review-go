@@ -17,4 +17,9 @@ class CommitsController < ApplicationController
     @commits = Commit.master.pending
     render json: @commits
   end
+
+  def rejected
+    @commits = Commit.master.rejected
+    render json: @commits
+  end
 end
