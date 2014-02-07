@@ -22,6 +22,14 @@ class Commit < ActiveRecord::Base
     sha[0..6]
   end
 
+  def repo
+    super || Repo.unknown
+  end
+
+  def author
+    super || Person.unknown
+  end
+
   def as_json(options = nil)
     options[:include] ||= [:author, :committer]
     super(options)

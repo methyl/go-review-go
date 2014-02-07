@@ -1,20 +1,21 @@
 class CommitsController < ApplicationController
   skip_before_filter :verify_authenticity_token # FIXME
 
-  def show
-    commit = Commit.find_by_sha(params[:id])
+  def index
+    @commits = Commit.master
     respond_to do |format|
-      format.json { render :json => commit }
+      format.html
+      format.json { render :json => @commits }
+      format.text { render :index }
     end
   end
 
-  def update
-    commit = Commit.find_or_create_by(sha: params[:id])
-    commit.update_attributes!(status: params[:status])
-    Notification.new(commit).deliver
+  def all
+    @commits = Commit.scoped
     respond_to do |format|
-      format.html { redirect_to pending_commits_path }
-      format.json { render :json => commit }
+      format.html
+      format.json { render :json => @commits }
+      format.text { render :index }
     end
   end
 
@@ -33,6 +34,23 @@ class CommitsController < ApplicationController
       format.html
       format.json { render :json => @commits }
       format.text { render :index }
+    end
+  end
+
+  def show
+    commit = Commit.find_by_sha(params[:id])
+    respond_to do |format|
+      format.json { render :json => commit }
+    end
+  end
+
+  def update
+    commit = Commit.find_or_create_by(sha: params[:id])
+    commit.update_attributes!(status: params[:status])
+    Notification.new(commit).deliver
+    respond_to do |format|
+      format.html { redirect_to pending_commits_path }
+      format.json { render :json => commit }
     end
   end
 end

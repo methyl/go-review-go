@@ -1,6 +1,7 @@
 GoReviewGo::Application.routes.draw do
   resources :commits do
     collection do
+      get :all
       get :pending
       get :rejected
     end

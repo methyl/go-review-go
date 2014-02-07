@@ -5,4 +5,8 @@ class Repo < ActiveRecord::Base
   def full_name
     "#{owner}/#{name}"
   end
+
+  def self.unknown
+    @unknown ||= Repo.new(owner: "unknown", name: "unknown")
+  end
 end
