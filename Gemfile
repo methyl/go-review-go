@@ -12,3 +12,4 @@ gem 'jbuilder', '~> 1.2'
 gem 'hipchat', github: 'hipchat/hipchat-rb'
 gem 'dotenv-rails', group: :development
 gem 'haml-rails'
+gem 'rails_12factor', group: :production
