@@ -20,6 +20,7 @@ class CommitsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render :json => @commits }
+      format.text { render :index }
     end
   end
 
@@ -28,6 +29,7 @@ class CommitsController < ApplicationController
     respond_to do |format|
       format.html
       format.json { render :json => @commits }
+      format.text { render :index }
     end
   end
 end
