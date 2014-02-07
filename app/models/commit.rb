@@ -1,4 +1,5 @@
 class Commit < ActiveRecord::Base
+  belongs_to :repo
   belongs_to :author, class_name: "Person"
   belongs_to :committer, class_name: "Person"
 

@@ -11,9 +11,10 @@ class Push
 
   def create_commit(payload)
     Commit.find_or_create_by(sha: payload["id"]) do |c|
-      c.author = find_or_create_person(payload["author"])
+      c.repo      = repo
+      c.author    = find_or_create_person(payload["author"])
       c.committer = find_or_create_person(payload["committer"])
-      c.message = payload["message"]
+      c.message   = payload["message"]
       c.timestamp = Time.parse(payload["timestamp"])
     end
   end
@@ -23,5 +24,9 @@ class Push
       p.name = payload["name"]
       p.username = payload["username"]
     end
+  end
+
+  def repo
+    Repo.find_or_create_by!(owner: @payload["repository"]["owner"]["name"], name: @payload["repository"]["name"])
   end
 end
