@@ -1,4 +1,8 @@
 %div.commit
+  = button_to "Accept", commit_path(commit, status: "accepted"), method: :put
+  = button_to "Pass", commit_path(commit, status: "passed"), method: :put
+  = button_to "Reject", commit_path(commit, status: "rejected"), method: :put
+
   = link_to commit.sha, commit.github_url
   &nbsp;
   = commit.timestamp

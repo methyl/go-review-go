@@ -15,3 +15,7 @@
 div.commit {
   font-family: monospace;
 }
+
+form.button_to, form.button_to div {
+  display: inline;
+}
