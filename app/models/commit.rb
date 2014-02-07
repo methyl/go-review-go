@@ -18,6 +18,10 @@ class Commit < ActiveRecord::Base
     "https://github.com/#{repo.full_name}/commit/#{sha}"
   end
 
+  def sha_short
+    sha[0..6]
+  end
+
   def as_json(options = nil)
     options[:include] ||= [:author, :committer]
     super(options)

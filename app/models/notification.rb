@@ -21,14 +21,16 @@ class Notification
   end
 
   def body
-    "Commit #{commit.sha} was #{commit.status}"
+    "Commit <a href='#{commit.github_url}'>#{commit.sha_short}</a> by <a href='#{commit.author.github_url}'>#{commit.author.username}</a> is #{commit.status}"
   end
 
+  COLORS = {
+    "rejected" => "red",
+    "passed"   => "yellow",
+    "accepted" => "green"
+  }
+
   def color
-    case commit.status
-    when "rejected" then "red"
-    when "passed" then "yellow"
-    when "accepted" then "green"
-    end
+    COLORS.fetch(commit.status)
   end
 end
