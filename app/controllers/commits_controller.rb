@@ -39,9 +39,7 @@ class CommitsController < ApplicationController
 
   def show
     commit = Commit.find_by_sha(params[:id])
-    respond_to do |format|
-      format.json { render :json => commit }
-    end
+    render :json => commit
   end
 
   def update
